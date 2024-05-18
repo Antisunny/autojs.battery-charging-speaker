@@ -1,0 +1,16 @@
+{
+  "name": "battery-charging-speaker",
+  "version": "0.0.1",
+  "description": "低于指定电量提醒，高于指定电量提醒",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dts": "npm i @sm003/autojs6-dts"
+  },
+  "keywords": [],
+  "author": "Ryan Lincs",
+  "license": "ISC",
+  "devDependencies": {
+    "@sm003/autojs6-dts": "^2.0.0"
+  }
+}

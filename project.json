@@ -1,0 +1,22 @@
+{
+    "assets": [],
+    "encryptLevel": 0,
+    "useFeatures": [],
+    "launchConfig": {
+      "displaySplash": true,
+      "hideLogs": false,
+      "splashText": "Powered by AutoJs6",
+      "stableMode": false
+    },
+    "main": "main.js",
+    "name": "电量充电报告器",
+    "optimization": {
+      "removeOpenCv": true,
+      "unusedResources": true
+    },
+    "packageName": "beer.mitoxys.battery-charging-speaker",
+    "scripts": {},
+    "versionCode": 1,
+    "versionName": "0.0.1",
+    "ignore": ["build", "node_modules", "out", ".gitignore"]
+  }
