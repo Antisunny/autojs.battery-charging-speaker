@@ -6,3 +6,7 @@
 ## 测试情况
 
 在小米手机12S Ultra（HyperOS 1.0.5.0 with Android 14）上测试通过。
+
+## 实现难点
+
+Android的TTS初始化相较慢，导致speak时失败。通过在onInit方法中添加callback函数实现。
