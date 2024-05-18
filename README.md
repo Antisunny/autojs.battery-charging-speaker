@@ -5,4 +5,4 @@
 
 ## 测试情况
 
-在小米手机12S Ultra（）上测试
+在小米手机12S Ultra（HyperOS 1.0.5.0 with Android 14）上测试通过。
