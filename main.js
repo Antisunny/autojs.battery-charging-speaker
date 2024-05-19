@@ -7,7 +7,7 @@ var tts = require('tts.js');
 let LowThreshold = 30;
 let HighThreshold = 80;
 let NotifyStep = 5;
-let BatteryN; // 电池电量
+let BatteryN = 0; // 电池电量
 let Charging = false; // 正在充电中
 
 let mBatteryInformationReciver = new JavaAdapter(android.content.BroadcastReceiver, {
@@ -15,6 +15,7 @@ let mBatteryInformationReciver = new JavaAdapter(android.content.BroadcastReceiv
         let action = intent.getAction();
         if (intent.ACTION_BATTERY_CHANGED.equals(action)) {
             let BatteryN2 = intent.getIntExtra("level", 0);
+
             // 如果电量没变、在安全区域，跳过
             if (BatteryN == BatteryN2) return;
             if (BatteryN2 >= 32 && BatteryN2 <= 78) {
@@ -35,10 +36,19 @@ let mBatteryInformationReciver = new JavaAdapter(android.content.BroadcastReceiv
                 case BatteryManager.BATTERY_STATUS_UNKNOWN:
                     break;
             }
-            if (BatteryN2 <= LowThreshold && !Charging) {
+
+            log("充电状态：" + (Charging ? "正在充电": "未充电"));
+
+            if (BatteryN2 <= LowThreshold) {
+                if (Charging) {
+                    log("电量低，" + BatteryN2 + "%，正在充电... ...");
+                    BatteryN = BatteryN2;
+                    return;
+                }
                 // speak every 5% down
-                if (BatteryN - BatteryN2 < NotifyStep) {
-                    log("电量低，" + BatteryN2 + "%，不发声。")
+                if ((LowThreshold - BatteryN2) % NotifyStep !== 0) {
+                    log("电量低，" + BatteryN2 + "%，静默中。");
+                    BatteryN = BatteryN2;
                     return;
                 }
                 BatteryN = BatteryN2;
@@ -49,12 +59,19 @@ let mBatteryInformationReciver = new JavaAdapter(android.content.BroadcastReceiv
                 return;
             }
 
-            if (BatteryN2 >= HighThreshold && Charging) {
-                // speak every 5% up
-                if (BatteryN2 > BatteryN < NotifyStep) {
-                    log("电量高，" + BatteryN2 + "%，不发声。")
+            if (BatteryN2 >= HighThreshold) {
+                if (!Charging) {
+                    log("电量高，" + BatteryN2 + "%，没有充电... ...");
+                    BatteryN = BatteryN2;
                     return;
                 }
+                // speak every 5% up
+                if ((BatteryN2 - HighThreshold) % NotifyStep !== 0) {
+                    log("电量高，" + BatteryN2 + "%，不发声。");
+                    BatteryN = BatteryN2;
+                    return;
+                }
+                BatteryN = BatteryN2;
                 tts.speakText(ttsIns, "小米手机充电已完成，请断开充电器！");
                 // 有节奏震动手机
                 device.vibrate([240, 400, 400, 400, 400, 400, 600, 600, 300, 300, 100, 100, 100]);
@@ -64,7 +81,7 @@ let mBatteryInformationReciver = new JavaAdapter(android.content.BroadcastReceiv
 
             // NOTE：可以在此处添加更多监控逻辑哦
             BatteryN = BatteryN2;
-            toastLog("当前电量：" + BatteryN2);
+            log("当前电量：" + BatteryN2);
         }
     }
 });
