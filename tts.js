@@ -42,4 +42,16 @@ function speakText(tts, text) {
     }
 }
 
+// function main() {
+//     let ttsIns = initTTS(
+//         context,
+//         () => {
+//             speakText(ttsIns, "请说中文普通话");
+//         }
+//     );
+
+// }
+
+// main();
+
 module.exports = { speakText, initTTS};
